@@ -1,0 +1,9 @@
+
+Adding a Sale:
+A sale is created for a product with its quantity and totalPrice and then added to a cart.
+
+Cart Management:
+A cart contains a list of sales (salesID) associated with a user and their cumulative total.
+
+Placing an Order:
+When an order is created, the sales from the cart are moved to the Order model, and the cart is cleared.
