@@ -32,7 +32,7 @@ const register = async (req, res) => {
                 imageUrl: req.body.imageUrl,
                 password: hashedPass,
                 gender: req.body.gender,
-                birthDate: null,
+                birthDate: req.body.birthDate,
             });
 
            
@@ -121,22 +121,29 @@ const profilgetById = async (req, res) => {
 // Update user profile
 // This function updates the user's profile information such as name, email, phone, address, and other fields.
 const UpdateProfil = async (req, res) => {
-    const { firstName, lastName, id, email, phone, address, imageUrl, gender, birthDate } = req.body;
+    const { firstName, lastName, id, phone, address, gender, birthDate } = req.body;
 
+  
     try {
         // Update the user details in the database
         const updatedUser = await User.findByIdAndUpdate(
             id,
-            { firstName, lastName, email, phone, address, imageUrl, gender, birthDate },
+            { firstName, lastName, phone, address, gender, birthDate },
             { new: true }
         );
+
+
+        if (!updatedUser) {
+            return res.status(404).json({ message: "User not found" });
+        }
 
         res.status(200).json({
             message: "Profile updated successfully",
             updatedUser,
         });
-    } catch (error) {
-        res.status(500).json({ message: "Profile not updated" });
+    }  catch (error) {
+        console.error("Error updating profile:", error);
+        res.status(500).json({ message: "Profile not updated", error: error.message });
     }
 };
 
@@ -165,6 +172,27 @@ const refreshtoken = (req, res) => {
         });
     });
 }; 
+
+
+const updateUserImage = async (req, res) => {
+    const uid = req.params.id;
+    const updateFields = {
+      image: req.body.image,
+    };
+  
+    try {
+      const updatedUser = await User.findByIdAndUpdate(uid, updateFields, {
+        new: true,
+      });
+      if (!updatedUser) {
+        res.status(404).json({ msg: "user not found" });
+      } else {
+        res.status(200).json({ msg: "image updated successfully", updatedUser });
+      }
+    } catch (err) {
+      res.status(500).json({ msg: "image not updated" });
+    }
+  };
 
 // Update user password
 // This function updates the user's password after verifying the old password.
@@ -464,7 +492,7 @@ const Resetpassword = async (req,res)=>{
     var passwordd = req.body.password
     var emaill = req.body.email
 
-    bycrypt.hash(passwordd,10,async function(err,hashedPass){
+    bcrypt.hash(passwordd,10,async function(err,hashedPass){
         if(err){
             return  res.status(500).json({
                 message : err
@@ -487,6 +515,9 @@ const Resetpassword = async (req,res)=>{
             }
         })
     })
+  
+
+    
 
     
 }
@@ -513,4 +544,6 @@ module.exports = {
     forgetPassword,
     Resetpassword,
     VerifCode,
+    updateUserImage,
+
 };

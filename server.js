@@ -24,7 +24,7 @@ const orderRoutes = require('./routers/Commande');
 app.use(morgan('dev'))
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(bodyParser.json())
-
+app.use("/uploads/images", express.static("uploads/images"));
 
 
 const cors = require('cors')
