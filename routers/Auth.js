@@ -50,7 +50,7 @@ router.post("/updateImage", upload.any("image"), async (req, res) => {
   var id = req.body.id;
   try {
     await User.findByIdAndUpdate(id, {
-      image:
+      imageUrl:
         "http://" +
         process.env.IP_ADDRESS +
         ":" +

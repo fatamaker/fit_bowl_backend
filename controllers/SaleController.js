@@ -6,11 +6,11 @@ const { ObjectId } = require('mongoose').Types;
 const mongoose = require('mongoose');
 
 // Create a new sale
-/* exports.createSale = async (req, res) => {
+ exports.createSale = async (req, res) => {
   try {
     
-    const { productId, userId, quantity, totalprice } = req.body;
-
+    const { productId, userId, quantity, totalprice, supplements, totalCalories } = req.body;
+  
     const product = await Product.findById(productId);
     if (!product) {
       return res.status(404).json({ error: 'Product not found.' });
@@ -28,6 +28,8 @@ const mongoose = require('mongoose');
       userId,
       quantity,
       totalprice,
+      supplements ,
+      totalCalories,
     });
 
   
@@ -38,67 +40,68 @@ const mongoose = require('mongoose');
   } catch (error) {
     res.status(500).json({ error: 'Failed to create the sale.' + error });
   }
-}; */
+}; 
 
 
-exports.createSale = async (req, res) => {
-  try {
-    const { productId, userId, quantity, supplements = [], size } = req.body;
+// exports.createSale = async (req, res) => {
+//   try {
+//     const { productId, userId, quantity, supplements = [], size } = req.body;
+//     console.log('Request Body:', req.body); // Debugging statement
 
-    // Fetch the product details based on the selected productId
-    const product = await Product.findById(productId);
-    if (!product) {
-      return res.status(404).json({ error: 'Product not found.' });
-    }
+//     // Fetch the product details based on the selected productId
+//     const product = await Product.findById(productId);
+//     if (!product) {
+//       console.error('Product not found:', productId);
+//       return res.status(404).json({ error: 'Product not found.' });
+//     }
 
-    // Ensure the size exists in the product sizes (small, medium, large)
-    if (!product.sizes[size]) {
-      return res.status(400).json({ error: 'Invalid size selected.' });
-    }
+//     // Ensure the size exists in the product sizes (small, medium, large)
+//     if (!product.sizes[size]) {
+//       console.error('Invalid size selected:', size);
+//       return res.status(400).json({ error: 'Invalid size selected.' });
+//     }
 
-    // Validate and calculate the price of supplements (if any)
-    let totalSupplementPrice = 0;
-    if (supplements.length > 0) {
-      // Fetch the supplements from the database
-      const validSupplements = await Supplement.find({
-        _id: { $in: supplements },
-      });
+//     // Validate and calculate the price of supplements (if any)
+//     let totalSupplementPrice = 0;
+//     if (supplements.length > 0) {
+//       const validSupplements = await Supplement.find({
+//         _id: { $in: supplements },
+//       });
 
-      // Check if all provided supplement IDs are valid
-      if (validSupplements.length !== supplements.length) {
-        return res
-          .status(400)
-          .json({ error: 'One or more selected supplements are invalid.' });
-      }
+//       // Check if all provided supplement IDs are valid
+//       if (validSupplements.length !== supplements.length) {
+//         console.error('One or more supplements are invalid:', supplements);
+//         return res.status(400).json({ error: 'One or more selected supplements are invalid.' });
+//       }
 
-      // Calculate the total price for the supplements
-      totalSupplementPrice = validSupplements.reduce(
-        (total, supplement) => total + supplement.price,
-        0
-      );
-    }
+//       totalSupplementPrice = validSupplements.reduce(
+//         (total, supplement) => total + supplement.price,
+//         0
+//       );
+//     }
 
-    // Calculate the total price
-    const totalPrice = (product.sizes[size].price + totalSupplementPrice) * quantity;
+//     // Calculate the total price
+//     const totalPrice = (product.sizes[size].price + totalSupplementPrice) * quantity;
 
-    // Create a new Sale instance
-    const newSale = new Sale({
-      productId,
-      userId,
-      quantity,
-      supplements, // Store the selected supplement IDs
-      totalprice: totalPrice, // Store the calculated total price
-    });
+//     // Create a new Sale instance
+//     const newSale = new Sale({
+//       productId,
+//       userId,
+//       quantity,
+//       totalprice: totalPrice, // Store the calculated total price
+//     });
 
-    // Save the sale
-    await newSale.save();
+//     // Save the sale
+//     await newSale.save();
 
-    // Return the newly created sale
-    res.status(201).json(newSale);
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to create the sale. ' + error.message });
-  }
-};
+//     // Return the newly created sale
+//     res.status(201).json(newSale);
+//   } catch (error) {
+//     console.error('Error creating sale:', error); // Log full error details
+//     res.status(500).json({ error: 'Failed to create the sale. ' + error.message });
+//   }
+// };
+
 
 
 // Get all sales and populate product and user details

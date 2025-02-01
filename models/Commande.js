@@ -9,7 +9,14 @@ const orderSchema = new mongoose.Schema({
     enum: ['pending', 'paid', 'shipped', 'completed', 'cancelled'],
     default: 'pending', 
   },
-  //shippingAddress:{type: String}
+  payment: {
+    type: String,
+    enum: ['Credit Card', 'PayPal', 'Cash on Delivery'],
+    default:'Credit Card',
+    required :true,
+     
+  },
+  deliveryAddress:{type: String,required :true}
   
 }, { timestamps: true });
 

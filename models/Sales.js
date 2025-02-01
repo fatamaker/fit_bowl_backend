@@ -5,6 +5,8 @@ const saleSchema = new mongoose.Schema({
   userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   quantity: { type: Number, required: true },
   totalprice: { type: Number},
+  supplements: [{ type: String}],
+  totalCalories:{ type: Number},
  
 }, { timestamps: true });
 

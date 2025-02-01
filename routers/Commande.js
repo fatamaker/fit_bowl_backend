@@ -4,15 +4,15 @@ const orderController = require('../controllers/CommandeController');
 const  authenticate = require('../middleware/authenticate')
 
 // Place an order
-router.post('/orders/place',authenticate ,orderController.placeOrder);
+router.post('/orders/place' ,orderController.placeOrder);
 
 // Get all orders for a user
-router.get('/orders/user/:userId',authenticate,orderController.getUserOrders);
+router.get('/orders/user/:userId',orderController.getUserOrders);
 
 // Get an order by ID
-router.get('/orders/:id',authenticate,orderController.getOrderById);
+router.get('/orders/:id',orderController.getOrderById);
 
 // Update order status
-router.patch('/orders/update-status',authenticate,orderController.updateOrderStatus);
+router.patch('/orders/update-status',orderController.updateOrderStatus);
 
 module.exports = router;

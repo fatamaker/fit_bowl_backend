@@ -4,25 +4,28 @@ const Cart = require('../models/Cart');
 // Place an order from a cart
 exports.placeOrder = async (req, res) => {
   try {
-    const { userId } = req.body;
+    const { userId, payment , deliveryAddress } = req.body;
 
-    const cart = await Cart.findOne({ userId }).populate('salesID');
-    if (!cart || cart.salesID.length === 0) {
+    const cart = await Cart.findOne({ userId }).populate('salesIds');
+    if (!cart || cart.salesIds.length === 0) {
       return res.status(400).json({ message: 'Cart is empty or not found' });
     }
 
     const newOrder = new Order({
       userId,
-      salesID: cart.salesID,
+      salesID: cart.salesIds,
       totalAmount: cart.cartTotal,
       status: 'pending',
+      deliveryAddress,
+      payment,
+
       
     });
 
     const savedOrder = await newOrder.save();
 
     // Clear the cart after placing the order
-    cart.salesID = [];
+    cart.salesIds = [];
     cart.cartTotal = 0;
     await cart.save();
 
