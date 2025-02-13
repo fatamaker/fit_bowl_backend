@@ -7,6 +7,8 @@ require('dotenv').config();
 
 
 const app = express()
+const cors = require('cors')
+app.use(cors()); 
 
 // Routes
 
@@ -27,9 +29,13 @@ app.use(bodyParser.json())
 app.use("/uploads/images", express.static("uploads/images"));
 
 
-const cors = require('cors')
-app.use(cors({origin: '*'}))
 
+
+
+
+
+
+                                                                                                                                                                                                            
 // MongoDB connection
 mongoose
   .connect('mongodb://localhost:27017/HEALTH-SALADE', { useNewUrlParser: true, useUnifiedTopology: true })
@@ -56,6 +62,9 @@ app.use((err, req, res, next) => {
 
 
 
-app.listen(process.env.PORT, ()=>{
-  console.log(`server run on port ${process.env.PORT}`)
-})
+// app.listen(process.env.PORT, ()=>{
+//   console.log(`server run on port ${process.env.PORT}`)
+// })
+app.listen(5000, '0.0.0.0', () => {
+  console.log('Server is running on http://0.0.0.0:5000');
+});

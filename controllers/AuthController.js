@@ -420,7 +420,7 @@ const forgetPassword = async (req, res) => {
 
         const mailTransporter = nodemailer.createTransport({
             service: "gmail",
-            auth: { user: "fit.bowl.teams@gmail.com", pass: "yrnr ygcs mano razw" },
+            auth: { user: "fit.bowl.teams@gmail.com", pass: "xlzn zzkg xeqh kpkm" },
         });
 
         // Send email
